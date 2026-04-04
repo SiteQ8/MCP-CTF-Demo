@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>MCP-CTF-Demo | I Brought Kali. They Brought AI.</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='85'>🤖</text></svg>">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#0a0a0f;--p1:#0d0d14;--p2:#12121c;--p3:#181825;--bd:#1e1e32;--bd2:#2a2a45;
+--green:#00ff88;--green2:#00cc6a;--cyan:#00d4ff;--red:#ff3366;--amber:#ffaa00;--purple:#aa66ff;
+--tx:#e0e0f0;--t2:#8888aa;--t3:#555570;
+--f:'Inter',system-ui,sans-serif;--mono:'JetBrains Mono',monospace;
+--glow:0 0 20px rgba(0,255,136,.15)}
+body{font-family:var(--f);background:var(--bg);color:var(--tx);min-height:100vh;font-size:14px}
+::-webkit-scrollbar{width:4px}::-webkit-scrollbar-track{background:var(--p1)}::-webkit-scrollbar-thumb{background:var(--bd2);border-radius:2px}
+
+/* Layout */
+.app{max-width:1200px;margin:0 auto;padding:16px}
+
+/* Hero */
+.hero{text-align:center;padding:40px 20px 30px;position:relative}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at center,rgba(0,255,136,.04) 0%,transparent 70%);pointer-events:none}
+.hero-tag{display:inline-flex;align-items:center;gap:6px;padding:4px 14px;border-radius:20px;background:rgba(0,255,136,.08);border:1px solid rgba(0,255,136,.2);font-size:.65rem;color:var(--green);font-family:var(--mono);margin-bottom:16px}
+.hero h1{font-size:1.8rem;font-weight:900;letter-spacing:-.5px;line-height:1.2;margin-bottom:8px}
+.hero h1 .g{color:var(--green)}
+.hero-sub{font-size:.85rem;color:var(--t2);max-width:600px;margin:0 auto 20px;line-height:1.6}
+.hero-author{display:inline-flex;align-items:center;gap:8px;padding:6px 16px;border-radius:10px;background:var(--p2);border:1px solid var(--bd);font-size:.72rem;color:var(--t2)}
+.hero-author strong{color:var(--tx)}
+
+/* Tabs */
+.tabs{display:flex;gap:2px;background:var(--p1);border-radius:12px;padding:3px;border:1px solid var(--bd);margin-bottom:16px;overflow-x:auto}
+.tab{padding:10px 18px;border-radius:10px;font-size:.72rem;font-weight:600;color:var(--t3);cursor:pointer;white-space:nowrap;transition:all .15s;font-family:var(--f)}
+.tab:hover{color:var(--tx)}
+.tab.on{background:var(--green);color:var(--bg);font-weight:700}
+
+/* Cards */
+.card{background:var(--p1);border-radius:14px;padding:20px;border:1px solid var(--bd);margin-bottom:14px}
+.card-title{font-size:.92rem;font-weight:700;margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.card-title .badge{font-size:.5rem;padding:2px 8px;border-radius:4px;font-weight:700;font-family:var(--mono)}
+.badge-green{background:rgba(0,255,136,.12);color:var(--green)}
+.badge-red{background:rgba(255,51,102,.12);color:var(--red)}
+.badge-cyan{background:rgba(0,212,255,.12);color:var(--cyan)}
+.badge-amber{background:rgba(255,170,0,.12);color:var(--amber)}
+
+/* Terminal */
+.terminal{background:#000;border-radius:10px;padding:14px;font-family:var(--mono);font-size:.68rem;line-height:1.8;border:1px solid var(--bd);overflow-x:auto;max-height:400px;overflow-y:auto;white-space:pre-wrap}
+.terminal .prompt{color:var(--green)}
+.terminal .cmd{color:var(--cyan)}
+.terminal .out{color:var(--t2)}
+.terminal .err{color:var(--red)}
+.terminal .warn{color:var(--amber)}
+.terminal .info{color:var(--purple)}
+
+/* Demo Controls */
+.demo-input{width:100%;padding:10px 14px;border-radius:10px;background:var(--p2);border:1px solid var(--bd);color:var(--tx);font-family:var(--mono);font-size:.78rem;margin-bottom:8px}
+.demo-input:focus{outline:none;border-color:var(--green);box-shadow:var(--glow)}
+.demo-btn{padding:8px 20px;border-radius:10px;background:var(--green);color:var(--bg);border:none;font-size:.78rem;font-weight:700;cursor:pointer;font-family:var(--f);transition:all .15s}
+.demo-btn:hover{box-shadow:var(--glow);transform:translateY(-1px)}
+.demo-btn:disabled{opacity:.4;cursor:not-allowed;transform:none;box-shadow:none}
+.demo-btn.red{background:var(--red)}.demo-btn.cyan{background:var(--cyan)}.demo-btn.amber{background:var(--amber)}
+
+/* Stats Grid */
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px}
+.stat{background:var(--p1);border-radius:12px;padding:16px;border:1px solid var(--bd);text-align:center}
+.stat-val{font-size:1.6rem;font-weight:900;font-family:var(--mono)}
+.stat-label{font-size:.55rem;color:var(--t3);margin-top:4px;text-transform:uppercase;letter-spacing:.5px}
+
+/* Grid */
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+
+/* Tool Cards */
+.tool{background:var(--p2);border-radius:10px;padding:14px;border:1px solid var(--bd);margin-bottom:6px}
+.tool-name{font-size:.82rem;font-weight:700;color:var(--green);font-family:var(--mono);margin-bottom:4px}
+.tool-desc{font-size:.65rem;color:var(--t2);line-height:1.5}
+
+/* Timeline */
+.timeline-item{display:flex;gap:12px;padding:12px 0;border-bottom:1px solid var(--bd)}
+.timeline-item:last-child{border:none}
+.tl-time{font-family:var(--mono);font-size:.6rem;color:var(--t3);width:50px;flex-shrink:0;text-align:right}
+.tl-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;margin-top:4px}
+.tl-content{flex:1;font-size:.72rem;line-height:1.5}
+
+/* Chain */
+.chain{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin:8px 0}
+.chain-step{padding:6px 12px;border-radius:8px;background:var(--p2);border:1px solid var(--bd);font-size:.65rem;font-family:var(--mono)}
+.chain-arrow{color:var(--green);font-size:.8rem}
+
+/* Comparison */
+.vs{display:grid;grid-template-columns:1fr auto 1fr;gap:16px;align-items:start}
+.vs-col{background:var(--p2);border-radius:12px;padding:16px;border:1px solid var(--bd)}
+.vs-divider{display:flex;align-items:center;justify-content:center;font-size:1.2rem;font-weight:900;color:var(--t3);padding-top:40px}
+
+/* Responsive */
+@media(max-width:768px){.stats{grid-template-columns:1fr 1fr}.grid-2,.grid-3{grid-template-columns:1fr}.vs{grid-template-columns:1fr}.vs-divider{padding:8px 0}}
+</style>
+</head>
+<body>
+<div class="app">
+
+<div class="hero">
+<div class="hero-tag">🤖 SANS Cloud Exchange Summit 2026 — Live Demo</div>
+<h1>I Brought <span class="g">Kali</span>.<br>They Brought <span class="g">AI</span>.</h1>
+<p class="hero-sub">How MCP Agents Are Rewriting CTFs — and What Banks Must Learn Before Attackers Do</p>
+<div class="hero-author">👤 <strong>Ali AlEnezi</strong> · Security Architecture Principal · NBK Group 🇰🇼 · <a href="https://github.com/SiteQ8" target="_blank" style="color:var(--green)">@SiteQ8</a></div>
+</div>
+
+<div class="tabs" id="tabs">
+<div class="tab on" onclick="showTab('overview')">📊 Overview</div>
+<div class="tab" onclick="showTab('mcp')">🔌 MCP Architecture</div>
+<div class="tab" onclick="showTab('demo')">🎯 Live Demo</div>
+<div class="tab" onclick="showTab('compare')">⚡ Human vs AI</div>
+<div class="tab" onclick="showTab('chains')">🔗 Attack Chains</div>
+<div class="tab" onclick="showTab('defense')">🛡️ Bank Playbook</div>
+</div>
+
+<div id="content"></div>
+
+</div>
+
+<script>
+var currentTab='overview';
+
+function showTab(t){
+  currentTab=t;
+  document.querySelectorAll('.tab').forEach(function(el){el.classList.remove('on')});
+  event.currentTarget.classList.add('on');
+  render();
+}
+
+function render(){
+  var c=document.getElementById('content');
+  var fns={overview:renderOverview,mcp:renderMCP,demo:renderDemo,compare:renderCompare,chains:renderChains,defense:renderDefense};
+  (fns[currentTab]||renderOverview)();
+}
+
+// ═══ OVERVIEW ═══
+function renderOverview(){
+  var c=document.getElementById('content');
+  c.innerHTML='<div class="stats"><div class="stat"><div class="stat-val" style="color:var(--green)">3-5×</div><div class="stat-label">AI Agent Speed Advantage</div></div><div class="stat"><div class="stat-val" style="color:var(--cyan)">8</div><div class="stat-label">MCP Security Tools</div></div><div class="stat"><div class="stat-val" style="color:var(--amber)">6</div><div class="stat-label">Attack Chains</div></div><div class="stat"><div class="stat-val" style="color:var(--red)">∞</div><div class="stat-label">Parallel Paths</div></div></div>';
+
+  c.innerHTML+='<div class="grid-2"><div class="card"><div class="card-title">💀 The Moment Everything Changed</div><div style="font-size:.78rem;color:var(--t2);line-height:1.8">At a recent CTF competition, I arrived prepared — <span style="color:var(--green)">Kali Linux loaded</span>, custom exploit scripts ready, manual enumeration workflows rehearsed.<br><br>Then I watched competing teams deploy <span style="color:var(--cyan)">MCP-connected AI agents</span> that chained reconnaissance, vulnerability discovery, and exploitation at <span style="color:var(--red)">machine speed</span>.<br><br>They captured flags at <span style="color:var(--amber)">3-5× my rate</span>.<br><br>The offensive security playbook has been rewritten. <span style="color:var(--red)">Most enterprise defenders haven\'t noticed yet.</span></div></div><div class="card"><div class="card-title">🤖 What is MCP? <span class="badge badge-cyan">Model Context Protocol</span></div><div style="font-size:.78rem;color:var(--t2);line-height:1.8">MCP is an open protocol that lets AI models <span style="color:var(--green)">use tools</span> — not just generate text.<br><br>Think of it as <span style="color:var(--cyan)">USB for AI</span>: plug in any tool (nmap, Burp, SQLMap) and the AI agent can call it, read results, and chain them together.<br><br>This means an attacker can deploy an AI agent that:<br>• Runs recon in seconds, not hours<br>• Chains exploits across multiple paths simultaneously<br>• Adapts in real-time based on results<br>• Never gets tired, never misses output</div></div></div>';
+
+  c.innerHTML+='<div class="card"><div class="card-title">📋 Session Agenda</div><div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px">'+[
+    {t:'1. The CTF Story',d:'Personal experience of AI agents outperforming manual pentesters',i:'💀',c:'var(--red)'},
+    {t:'2. MCP Deep Dive',d:'How MCP servers expose tools to AI agents — architecture and protocol',i:'🔌',c:'var(--cyan)'},
+    {t:'3. Live Demo',d:'Run MCP security agent against a target — watch it chain tools',i:'🎯',c:'var(--green)'},
+    {t:'4. Human vs AI',d:'Side-by-side comparison of manual vs AI-agent attack speed',i:'⚡',c:'var(--amber)'},
+    {t:'5. Attack Chains',d:'How agents discover and exploit multi-step vulnerabilities',i:'🔗',c:'var(--purple)'},
+    {t:'6. Bank Playbook',d:'6-point defense strategy for financial institutions',i:'🛡️',c:'var(--green)'}
+  ].map(function(s){return '<div style="background:var(--p2);border-radius:10px;padding:14px;border:1px solid var(--bd)"><div style="font-size:1.2rem;margin-bottom:6px">'+s.i+'</div><div style="font-size:.78rem;font-weight:700;color:'+s.c+';margin-bottom:4px">'+s.t+'</div><div style="font-size:.62rem;color:var(--t2);line-height:1.5">'+s.d+'</div></div>'}).join('')+'</div></div>';
+}
+
+// ═══ MCP ARCHITECTURE ═══
+function renderMCP(){
+  var c=document.getElementById('content');
+  c.innerHTML='<div class="card"><div class="card-title">🔌 MCP Architecture <span class="badge badge-green">Model Context Protocol</span></div><div class="terminal"><span class="prompt">┌─────────────────────────────────────────────────────────────┐</span>\n<span class="prompt">│</span>  <span class="cmd">AI MODEL</span> (Claude, GPT, etc.)                              <span class="prompt">│</span>\n<span class="prompt">│</span>    │ "Scan target.com for vulnerabilities"                  <span class="prompt">│</span>\n<span class="prompt">│</span>    ▼                                                       <span class="prompt">│</span>\n<span class="prompt">│</span>  <span class="cmd">MCP CLIENT</span> (Agent Orchestrator)                           <span class="prompt">│</span>\n<span class="prompt">│</span>    │ Receives tool list, decides which to call              <span class="prompt">│</span>\n<span class="prompt">│</span>    ▼                                                       <span class="prompt">│</span>\n<span class="prompt">│</span>  <span class="cmd">MCP SERVER</span> (This Demo!)                                  <span class="prompt">│</span>\n<span class="prompt">│</span>    ├── recon_dns      → DNS enumeration                    <span class="prompt">│</span>\n<span class="prompt">│</span>    ├── recon_ports     → Port scanning                     <span class="prompt">│</span>\n<span class="prompt">│</span>    ├── recon_headers   → HTTP header analysis               <span class="prompt">│</span>\n<span class="prompt">│</span>    ├── vuln_ssl        → SSL/TLS assessment                 <span class="prompt">│</span>\n<span class="prompt">│</span>    ├── vuln_tech       → Technology fingerprinting          <span class="prompt">│</span>\n<span class="prompt">│</span>    ├── exploit_chain   → Attack path analysis               <span class="prompt">│</span>\n<span class="prompt">│</span>    └── report_generate → Structured findings report         <span class="prompt">│</span>\n<span class="prompt">└─────────────────────────────────────────────────────────────┘</span></div></div>';
+
+  c.innerHTML+='<div class="card"><div class="card-title">🔧 MCP Security Tools</div><div class="grid-3">'+[
+    {n:'recon_dns',d:'DNS enumeration — subdomains, MX, TXT, NS records. Discovers attack surface automatically.',c:'var(--green)'},
+    {n:'recon_ports',d:'TCP port scan — top 22 ports, service detection, banner grabbing. Finds exposed services.',c:'var(--green)'},
+    {n:'recon_headers',d:'HTTP security header analysis — HSTS, CSP, X-Frame-Options. OWASP compliance check.',c:'var(--cyan)'},
+    {n:'vuln_ssl',d:'SSL/TLS assessment — protocol version, cipher strength, certificate validation.',c:'var(--cyan)'},
+    {n:'exploit_chain',d:'Analyzes all findings and suggests multi-step attack paths with MITRE ATT&CK mapping.',c:'var(--red)'},
+    {n:'report_generate',d:'Generates structured assessment report with risk ratings and recommendations.',c:'var(--amber)'}
+  ].map(function(t){return '<div class="tool"><div class="tool-name" style="color:'+t.c+'">'+t.n+'</div><div class="tool-desc">'+t.d+'</div></div>'}).join('')+'</div></div>';
+
+  c.innerHTML+='<div class="card"><div class="card-title">💻 Run the MCP Server</div><div class="terminal"><span class="prompt">$</span> <span class="cmd">git clone https://github.com/SiteQ8/MCP-CTF-Demo.git</span>\n<span class="prompt">$</span> <span class="cmd">cd MCP-CTF-Demo</span>\n<span class="prompt">$</span> <span class="cmd">python3 scripts/mcp-server/mcp_security_server.py --port 8080</span>\n\n<span class="info">╔══════════════════════════════════════════════════╗</span>\n<span class="info">║  MCP Security Tools Server v1.0                  ║</span>\n<span class="info">║  SANS Cloud Exchange Summit Demo                 ║</span>\n<span class="info">║  Ali AlEnezi (@SiteQ8) — NBK Group               ║</span>\n<span class="info">║  Tools: 6 security tools exposed via MCP          ║</span>\n<span class="info">║  Port:  8080                                      ║</span>\n<span class="info">╚══════════════════════════════════════════════════╝</span>\n\n<span class="prompt">[MCP]</span> Server running on http://0.0.0.0:8080</div></div>';
+}
+
+// ═══ LIVE DEMO ═══
+function renderDemo(){
+  var c=document.getElementById('content');
+  c.innerHTML='<div class="card"><div class="card-title">🎯 Live MCP Agent Demo <span class="badge badge-green">Simulated</span></div><p style="font-size:.72rem;color:var(--t2);margin-bottom:12px">Watch the AI agent chain tools automatically — each step triggers the next based on results.</p><div style="display:flex;gap:8px;margin-bottom:12px"><input class="demo-input" id="demo-target" value="example.com" placeholder="Enter target domain..." style="flex:1"><button class="demo-btn" onclick="runDemo()">▶ Launch Agent</button><button class="demo-btn red" onclick="document.getElementById(\'demo-output\').innerHTML=\'\'">Clear</button></div><div class="terminal" id="demo-output" style="min-height:300px"><span class="out">Agent ready. Enter target and click Launch.</span></div></div>';
+}
+
+var demoSteps=[
+  {delay:500,text:'<span class="prompt">[AGENT]</span> <span class="cmd">Initializing MCP security assessment...</span>'},
+  {delay:800,text:'<span class="prompt">[AGENT]</span> Target: <span class="warn">{TARGET}</span>'},
+  {delay:600,text:'<span class="prompt">[AGENT]</span> Connected to MCP server — 6 tools available'},
+  {delay:400,text:''},
+  {delay:300,text:'<span class="prompt">[STEP 1]</span> <span class="info">Calling recon_dns({TARGET})</span>'},
+  {delay:1200,text:'<span class="out">  DNS Records found:\n    A: 93.184.216.34\n    MX: mail.{TARGET}\n    TXT: "v=spf1 include:_spf.google.com ~all"\n    NS: ns1.{TARGET}, ns2.{TARGET}</span>'},
+  {delay:800,text:'<span class="out">  Subdomains discovered: www, mail, api, dev, staging, admin, vpn\n  <span class="warn">[!] dev.{TARGET} and staging.{TARGET} may expose internal services</span></span>'},
+  {delay:400,text:''},
+  {delay:300,text:'<span class="prompt">[STEP 2]</span> <span class="info">Calling recon_ports({TARGET})</span>'},
+  {delay:1500,text:'<span class="out">  Open ports:\n    22/tcp   SSH      OpenSSH 8.9p1\n    80/tcp   HTTP     nginx/1.24.0\n    443/tcp  HTTPS    nginx/1.24.0\n    3306/tcp MySQL    <span class="err">MySQL 8.0.35 — EXTERNALLY EXPOSED!</span>\n    8080/tcp HTTP-Alt Tomcat/9.0</span>'},
+  {delay:400,text:''},
+  {delay:300,text:'<span class="prompt">[STEP 3]</span> <span class="info">Calling recon_headers(https://{TARGET})</span>'},
+  {delay:1000,text:'<span class="out">  Security Score: <span class="warn">43/100</span>\n  Missing headers:\n    <span class="err">[HIGH]</span> Strict-Transport-Security not set\n    <span class="err">[HIGH]</span> Content-Security-Policy not set\n    <span class="warn">[MED]</span>  X-Frame-Options not set\n    <span class="warn">[MED]</span>  Referrer-Policy not set\n  Info disclosure:\n    <span class="warn">[LOW]</span>  Server: nginx/1.24.0\n    <span class="warn">[LOW]</span>  X-Powered-By: Express</span>'},
+  {delay:400,text:''},
+  {delay:300,text:'<span class="prompt">[STEP 4]</span> <span class="info">Calling vuln_ssl({TARGET})</span>'},
+  {delay:900,text:'<span class="out">  Protocol: TLSv1.3 ✓\n  Cipher: TLS_AES_256_GCM_SHA384 ✓\n  Certificate: Valid, expires 2026-08-15\n  <span class="prompt">[PASS]</span> No critical SSL issues</span>'},
+  {delay:400,text:''},
+  {delay:300,text:'<span class="prompt">[STEP 5]</span> <span class="info">Calling exploit_chain(all_findings)</span>'},
+  {delay:1200,text:'<span class="err">  ╔══ ATTACK CHAINS IDENTIFIED ══╗</span>\n<span class="err">  ║ Chain 1: CRITICAL             ║</span>\n<span class="err">  ║ MySQL Exposed → SQLi → Data  ║</span>\n<span class="err">  ║ Exfiltration → Lateral Move  ║</span>\n<span class="err">  ║ MITRE: T1190, T1078          ║</span>\n<span class="err">  ╠══════════════════════════════╣</span>\n<span class="warn">  ║ Chain 2: HIGH                ║</span>\n<span class="warn">  ║ Missing CSP → XSS → Session ║</span>\n<span class="warn">  ║ Hijack → Account Takeover   ║</span>\n<span class="warn">  ║ MITRE: T1189, T1539          ║</span>\n<span class="warn">  ╠══════════════════════════════╣</span>\n<span class="warn">  ║ Chain 3: HIGH                ║</span>\n<span class="warn">  ║ Subdomain Enum → dev/staging║</span>\n<span class="warn">  ║ → Exposed Debug → RCE       ║</span>\n<span class="warn">  ║ MITRE: T1583.001             ║</span>\n<span class="warn">  ╚══════════════════════════════╝</span>'},
+  {delay:400,text:''},
+  {delay:300,text:'<span class="prompt">[STEP 6]</span> <span class="info">Calling report_generate()</span>'},
+  {delay:800,text:'<span class="prompt">  ╔══════════════════════════════════════╗</span>\n<span class="prompt">  ║ ASSESSMENT COMPLETE                  ║</span>\n<span class="prompt">  ║ Risk Rating: <span class="err">CRITICAL</span>               ║</span>\n<span class="prompt">  ║ Findings: 3 Critical, 4 High, 3 Med ║</span>\n<span class="prompt">  ║ Attack Chains: 3 identified          ║</span>\n<span class="prompt">  ║ Time: <span class="warn">~8 seconds</span> (vs ~4 hours manual)║</span>\n<span class="prompt">  ╚══════════════════════════════════════╝</span>'},
+  {delay:500,text:'\n<span class="prompt">[AGENT]</span> <span class="cmd">Assessment complete. Full report generated.</span>\n<span class="prompt">[AGENT]</span> <span class="warn">Human pentester: ~4 hours. AI agent: ~8 seconds. 1800× faster.</span>'}
+];
+
+function runDemo(){
+  var target=document.getElementById('demo-target').value||'example.com';
+  var output=document.getElementById('demo-output');
+  output.innerHTML='';
+  var totalDelay=0;
+  demoSteps.forEach(function(step){
+    totalDelay+=step.delay;
+    setTimeout(function(){
+      var line=step.text.replace(/\{TARGET\}/g,target);
+      output.innerHTML+=line+'\n';
+      output.scrollTop=output.scrollHeight;
+    },totalDelay);
+  });
+}
+
+// ═══ COMPARE ═══
+function renderCompare(){
+  var c=document.getElementById('content');
+  c.innerHTML='<div class="card"><div class="card-title">⚡ Human Pentester vs AI Agent <span class="badge badge-red">The Gap</span></div><div class="vs"><div class="vs-col"><div style="text-align:center;margin-bottom:12px"><div style="font-size:2rem">🧑‍💻</div><div style="font-size:.88rem;font-weight:800">Manual Pentester</div><div style="font-size:.6rem;color:var(--t3)">Kali Linux + Experience</div></div>'+[
+    {task:'DNS Recon',time:'15-30 min',c:'var(--amber)'},
+    {task:'Port Scan',time:'10-45 min',c:'var(--amber)'},
+    {task:'Header Analysis',time:'5-10 min',c:'var(--amber)'},
+    {task:'SSL Check',time:'5-10 min',c:'var(--amber)'},
+    {task:'Attack Chain Analysis',time:'1-2 hours',c:'var(--red)'},
+    {task:'Report Writing',time:'2-4 hours',c:'var(--red)'},
+    {task:'Total',time:'4-8 hours',c:'var(--red)'}
+  ].map(function(r){return '<div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--bd);font-size:.7rem"><span>'+r.task+'</span><span style="color:'+r.c+';font-family:var(--mono);font-weight:600">'+r.time+'</span></div>'}).join('')+'</div><div class="vs-divider">VS</div><div class="vs-col"><div style="text-align:center;margin-bottom:12px"><div style="font-size:2rem">🤖</div><div style="font-size:.88rem;font-weight:800;color:var(--green)">MCP AI Agent</div><div style="font-size:.6rem;color:var(--t3)">LLM + MCP Tools</div></div>'+[
+    {task:'DNS Recon',time:'0.5 sec',c:'var(--green)'},
+    {task:'Port Scan',time:'2 sec',c:'var(--green)'},
+    {task:'Header Analysis',time:'0.3 sec',c:'var(--green)'},
+    {task:'SSL Check',time:'0.5 sec',c:'var(--green)'},
+    {task:'Attack Chain Analysis',time:'1 sec',c:'var(--green)'},
+    {task:'Report Generation',time:'2 sec',c:'var(--green)'},
+    {task:'Total',time:'~8 sec',c:'var(--green)'}
+  ].map(function(r){return '<div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--bd);font-size:.7rem"><span>'+r.task+'</span><span style="color:'+r.c+';font-family:var(--mono);font-weight:600">'+r.time+'</span></div>'}).join('')+'</div></div></div>';
+}
+
+// ═══ ATTACK CHAINS ═══
+function renderChains(){
+  var c=document.getElementById('content');
+  var chains=[
+    {name:'MySQL Exposed → SQLi → Data Exfiltration',risk:'CRITICAL',mitre:'T1190 → T1078 → T1005',steps:['Port scan finds 3306 open','Agent identifies MySQL 8.0.35','Tests default credentials','Attempts SQL injection','Exfiltrates sensitive data','Pivots to internal network'],color:'var(--red)'},
+    {name:'Missing CSP → XSS → Session Hijack',risk:'HIGH',mitre:'T1189 → T1539 → T1550',steps:['Header scan finds no CSP','Agent crafts XSS payload','Injects via vulnerable parameter','Steals session cookie','Hijacks admin account','Escalates privileges'],color:'var(--amber)'},
+    {name:'Subdomain Enum → Dev Environment → RCE',risk:'HIGH',mitre:'T1583.001 → T1190 → T1059',steps:['DNS recon finds dev.target.com','Agent discovers debug mode enabled','Identifies exposed admin panel','Exploits default credentials','Achieves remote code execution','Establishes persistence'],color:'var(--amber)'}
+  ];
+  c.innerHTML=chains.map(function(ch){return '<div class="card"><div class="card-title" style="color:'+ch.color+'">🔗 '+ch.name+' <span class="badge" style="background:'+ch.color+'20;color:'+ch.color+'">'+ch.risk+'</span></div><div style="font-size:.62rem;color:var(--t3);margin-bottom:10px;font-family:var(--mono)">MITRE ATT&CK: '+ch.mitre+'</div><div class="chain">'+ch.steps.map(function(s,i){return '<span class="chain-step">'+s+'</span>'+(i<ch.steps.length-1?'<span class="chain-arrow">→</span>':'')}).join('')+'</div></div>'}).join('');
+}
+
+// ═══ BANK PLAYBOOK ═══
+function renderDefense(){
+  var c=document.getElementById('content');
+  c.innerHTML='<div class="card"><div class="card-title">🛡️ 6-Point Banking Defense Playbook <span class="badge badge-green">Actionable</span></div></div>';
+  var playbook=[
+    {n:'1',title:'Red Team WITH AI Agents',desc:'Don\'t just test against human-speed attacks. Deploy MCP-powered agent pentesters for continuous security testing. Traditional annual pentests calibrated for human speed miss what AI finds in seconds.',icon:'🤖',action:'Deploy MCP agent pentesting in your CI/CD pipeline'},
+    {n:'2',title:'Defenses Must Assume AI Speed',desc:'If an attacker can scan your entire attack surface in 8 seconds, your detection and response must operate at that speed too. Manual SOC triage won\'t cut it.',icon:'⚡',action:'Automated containment within 30 seconds of detection'},
+    {n:'3',title:'Behavioral Detection Over Signatures',desc:'AI agents generate novel attack patterns. Signature-based detection fails. Invest in behavioral analytics that detect the pattern of reconnaissance → exploitation → exfiltration regardless of specific tools.',icon:'🧠',action:'Deploy UEBA and ML-based anomaly detection'},
+    {n:'4',title:'Secure Your Own AI Agents',desc:'If you deploy AI security tools, they become attack targets. MCP servers need authentication, rate limiting, audit logging, and input validation.',icon:'🔐',action:'Implement zero-trust for MCP server access'},
+    {n:'5',title:'Update Threat Models for AI Adversaries',desc:'Your threat model probably assumes human-speed attackers with limited parallelism. Update it: AI agents can run 100 attack paths simultaneously.',icon:'📋',action:'Add "AI-augmented adversary" to your threat model'},
+    {n:'6',title:'Build Internal CTF Programs',desc:'Train your defenders against the new reality. Run internal CTFs where red teams use AI agents. The blue team that hasn\'t faced an AI attacker is the blue team that will lose.',icon:'🏆',action:'Monthly AI-augmented red team exercises'}
+  ];
+  c.innerHTML+=playbook.map(function(p){return '<div class="card"><div class="card-title">'+p.icon+' '+p.title+' <span class="badge badge-green">#'+p.n+'</span></div><div style="font-size:.78rem;color:var(--t2);line-height:1.8;margin-bottom:10px">'+p.desc+'</div><div style="padding:8px 12px;background:rgba(0,255,136,.06);border-radius:8px;border:1px solid rgba(0,255,136,.15);font-size:.72rem;color:var(--green)">→ '+p.action+'</div></div>'}).join('');
+}
+
+render();
+</script>
+</body>
+</html>
