@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 MCP Security Tools Server
-SANS Cloud Exchange Summit Demo — Ali AlEnezi (@SiteQ8)
+SANS Cloud Exchange Summit Demo: Ali AlEnezi (@SiteQ8)
 
 A Model Context Protocol server that exposes security reconnaissance
 and vulnerability assessment tools for AI agent consumption.
@@ -37,7 +37,7 @@ VERSION = "1.0"
 # ═══ TOOL IMPLEMENTATIONS ═══
 
 def recon_dns(domain):
-    """DNS enumeration — subdomains, MX, TXT, NS records"""
+    """DNS enumeration: subdomains, MX, TXT, NS records"""
     results = {"domain": domain, "records": {}, "subdomains": []}
     
     for rtype in ["A", "MX", "TXT", "NS", "CNAME", "AAAA"]:
@@ -67,7 +67,7 @@ def recon_dns(domain):
     return results
 
 def recon_ports(target, ports=None):
-    """TCP port scan — top ports"""
+    """TCP port scan: top ports"""
     if ports is None:
         ports = [21, 22, 23, 25, 53, 80, 110, 143, 443, 445, 993, 995,
                  1433, 1521, 3306, 3389, 5432, 5900, 6379, 8080, 8443, 9200]
