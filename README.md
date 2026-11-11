@@ -1,9 +1,9 @@
 <div align="center">
 
-# 🤖 MCP-CTF-Demo
+# MCP-CTF-Demo
 
 ### I Brought Kali. They Brought AI.
-**How MCP Agents Are Rewriting CTFs — and What Banks Must Learn Before Attackers Do**
+**How MCP Agents Are Rewriting CTFs, and What Banks Must Learn Before Attackers Do**
 
 [![SANS](https://img.shields.io/badge/SANS-Cloud_Exchange_Summit_2026-dc2626?style=flat-square)]()
 [![MCP](https://img.shields.io/badge/MCP-Security_Tools-00ff88?style=flat-square)]()
@@ -16,15 +16,15 @@
 
 ---
 
-## 💀 The Story
+## The Story
 
-At a recent CTF competition, I arrived prepared — Kali Linux loaded, custom exploit scripts ready. Then I watched competing teams deploy **MCP-connected AI agents** that chained reconnaissance, vulnerability discovery, and exploitation at **machine speed**, capturing flags at **3-5× my rate**.
+At a recent CTF competition, I arrived prepared, Kali Linux loaded, custom exploit scripts ready. Then I watched competing teams deploy **MCP-connected AI agents** that chained reconnaissance, vulnerability discovery, and exploitation at **machine speed**, capturing flags at **3-5× my rate**.
 
 That moment revealed: the offensive security playbook has been rewritten.
 
 ---
 
-## 🔌 What's Inside
+## What's Inside
 
 ### MCP Security Server (`scripts/mcp-server/`)
 
@@ -32,8 +32,8 @@ A Python MCP server exposing 6 security tools:
 
 | Tool | Description |
 |------|-------------|
-| `recon_dns` | DNS enumeration — subdomains, MX, TXT, NS records |
-| `recon_ports` | TCP port scan — top 22 ports, banner grabbing |
+| `recon_dns` | DNS enumeration: subdomains, MX, TXT, NS records |
+| `recon_ports` | TCP port scan: top 22 ports, banner grabbing |
 | `recon_headers` | HTTP security header analysis (OWASP) |
 | `vuln_ssl` | SSL/TLS configuration assessment |
 | `exploit_chain` | Attack path analysis with MITRE ATT&CK mapping |
@@ -43,16 +43,16 @@ A Python MCP server exposing 6 security tools:
 
 6-tab web dashboard for the SANS presentation:
 
-- **📊 Overview** — The CTF story + MCP explanation
-- **🔌 MCP Architecture** — Protocol diagram + tool reference
-- **🎯 Live Demo** — Simulated AI agent running all 6 tools
-- **⚡ Human vs AI** — Side-by-side speed comparison
-- **🔗 Attack Chains** — 3 multi-step attack paths with MITRE mapping
-- **🛡️ Bank Playbook** — 6-point defense strategy
+- **Overview**: The CTF story + MCP explanation
+- **MCP Architecture**: Protocol diagram + tool reference
+- **Live Demo**: Simulated AI agent running all 6 tools
+- **Human vs AI**: Side-by-side speed comparison
+- **Attack Chains**: 3 multi-step attack paths with MITRE mapping
+- **Bank Playbook**: 6-point defense strategy
 
 ---
 
-## 🚀 Quick Start
+## Quick Start
 
 ### Run the MCP Server
 
@@ -80,18 +80,18 @@ curl -X POST http://localhost:8080 \
 
 ---
 
-## 🛡️ 6-Point Banking Defense Playbook
+## 6-Point Banking Defense Playbook
 
-1. **Red Team WITH AI Agents** — Deploy MCP agent pentesters in CI/CD
-2. **Assume AI Speed** — Automated containment within 30 seconds
-3. **Behavioral Detection** — UEBA over signatures
-4. **Secure Your AI Agents** — Zero-trust for MCP servers
-5. **Update Threat Models** — Add AI-augmented adversary scenarios
-6. **Internal CTFs** — Monthly AI-augmented red team exercises
+1. **Red Team WITH AI Agents**: Deploy MCP agent pentesters in CI/CD
+2. **Assume AI Speed**: Automated containment within 30 seconds
+3. **Behavioral Detection**: UEBA over signatures
+4. **Secure Your AI Agents**: Zero-trust for MCP servers
+5. **Update Threat Models**: Add AI-augmented adversary scenarios
+6. **Internal CTFs**: Monthly AI-augmented red team exercises
 
 ---
 
-## ⚡ Human vs AI Agent
+## Human vs AI Agent
 
 | Task | Human Pentester | MCP AI Agent |
 |------|----------------|--------------|
@@ -105,7 +105,7 @@ curl -X POST http://localhost:8080 \
 
 ---
 
-## 👤 Author
+## Author
 
 **Ali AlEnezi** · [@SiteQ8](https://github.com/SiteQ8) · [3li.info](https://3li.info)
 
